@@ -1,53 +1,53 @@
-include:
-  - docassemble.AssemblyLine:al_package.yml
-  - docassemble.MassAccess:massaccess.yml
----
-comment: |
-  The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
-metadata:
-  title: |
-    MA Criminal Record Sealing Form
-  short title: |
-    MA CORI Sealing
----
-comment: |
-  This section is used by AssemblyLine to control how some of the questions work.
-mandatory: True
-code: |
-  interview_metadata # make sure we initialize the object
-  if not defined("interview_metadata['macorisealingform']"):
-    interview_metadata.initializeObject('macorisealingform')
-  interview_metadata['macorisealingform'].update({
-    'title': 'MA Criminal Record Sealing Form',
-    'short title': 'MA CORI Sealing',
-    'description': 'Petition to seal MA criminal records',
-    'original_form': '',
-    'allowed courts': [
-      'Probate and Family Court',
-    ],
-    'categories': [
-    ],
-    'logic block variable': 'macorisealingform',
-    'attachment block variable': 'macorisealingform_attachment',
-    'typical role': 'plaintiff',
-  })
----
-code: |
-  interview_short_title = 'Seal your MA Criminal Records'
----
-code: |
-  al_form_type = 'other'
----
-features:
-  navigation: True
----
-sections:
-  - review_macorisealingform: Review your answers
----
-objects:
-  - users: ALPeopleList.using(ask_number=True,target_number=1)
-  - parents: ALPeopleList
-  - spouses: ALPeopleList
+# include:
+#   - docassemble.AssemblyLine:al_package.yml
+#   - docassemble.MassAccess:massaccess.yml
+# ---
+# comment: |
+#   The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
+# metadata:
+#   title: |
+#     MA Criminal Record Sealing Form
+#   short title: |
+#     MA CORI Sealing
+# ---
+# comment: |
+#   This section is used by AssemblyLine to control how some of the questions work.
+# mandatory: True
+# code: |
+#   interview_metadata # make sure we initialize the object
+#   if not defined("interview_metadata['macorisealingform']"):
+#     interview_metadata.initializeObject('macorisealingform')
+#   interview_metadata['macorisealingform'].update({
+#     'title': 'MA Criminal Record Sealing Form',
+#     'short title': 'MA CORI Sealing',
+#     'description': 'Petition to seal MA criminal records',
+#     'original_form': '',
+#     'allowed courts': [
+#       'Probate and Family Court',
+#     ],
+#     'categories': [
+#     ],
+#     'logic block variable': 'macorisealingform',
+#     'attachment block variable': 'macorisealingform_attachment',
+#     'typical role': 'plaintiff',
+#   })
+# ---
+# code: |
+#   interview_short_title = 'Seal your MA Criminal Records'
+# ---
+# code: |
+#   al_form_type = 'other'
+# ---
+# features:
+#   navigation: True
+# ---
+# sections:
+#   - review_macorisealingform: Review your answers
+# ---
+# objects:
+#   - users: ALPeopleList.using(ask_number=True,target_number=1)
+#   - parents: ALPeopleList
+#   - spouses: ALPeopleList
 
 ---
 ###################### Main order ######################
@@ -57,43 +57,42 @@ comment: |
   Delete mandatory: True to include in another interview
 id: main_order_macorisealingform
 code: |
-  al_intro_screen
   macorisealingform_intro
-  # Interview order block has form-specific logic controlling order/branching
-  interview_order_macorisealingform
-  signature_date
-  # Save (anonymized) interview statistics.
-  store_variables_snapshot(data={'zip': users[0].address.zip})
-  macorisealingform_preview_question  # Pre-canned preview screen
-  basic_questions_signature_flow
-  users[0].signature
-  macorisealingform_download
----
-#################### Interview order #####################
-comment: |
-  Controls order and branching logic of questions in the interview
-id: interview_order_macorisealingform
-code: |
-  # Set the allowed courts for this interview
-  allowed_courts = interview_metadata["macorisealingform"]["allowed courts"]
-  nav.set_section('review_macorisealingform')
-  user_role = 'plaintiff'
-  is_a1_juvenile
-  Screen_two
-  Screen_three
-  set_progress(14.29)
-  Screen_four
+  # # Interview order block has form-specific logic controlling order/branching
+  # interview_order_macorisealingform
+  # signature_date
+  # # Save (anonymized) interview statistics.
+  # store_variables_snapshot(data={'zip': users[0].address.zip})
+  # macorisealingform_preview_question  # Pre-canned preview screen
+  # basic_questions_signature_flow
+  # users[0].signature
+  # macorisealingform_download
+
+# #################### Interview order #####################
+# comment: |
+#   Controls order and branching logic of questions in the interview
+# id: interview_order_macorisealingform
+# code: |
+#   # Set the allowed courts for this interview
+#   allowed_courts = interview_metadata["macorisealingform"]["allowed courts"]
+#   nav.set_section('review_macorisealingform')
+#   user_role = 'plaintiff'
+#   is_a1_juvenile
+#   Screen_two
+#   Screen_three
+#   set_progress(14.29)
+#   Screen_four
   
-  users.gather()
-  set_parts(subtitle=str(users))
-  set_progress(28.57)
-  users[0].birthdate
-  set_progress(42.86)
-  users[0].mail_address.address
-  set_progress(57.14)
-  parents.gather()
-  spouses.gather()
-  interview_order_macorisealingform = True
+#   users.gather()
+#   set_parts(subtitle=str(users))
+#   set_progress(28.57)
+#   users[0].birthdate
+#   set_progress(42.86)
+#   users[0].mail_address.address
+#   set_progress(57.14)
+#   parents.gather()
+#   spouses.gather()
+#   interview_order_macorisealingform = True
 ---
 comment: |
   This question is used to introduce your interview. Please customize
@@ -103,235 +102,235 @@ question: |
   MA Criminal Record Sealing Form
 subquestion: |
   Petition to seal MA criminal records
----
-id: Review your form before you sign it
-continue button field: macorisealingform_preview_question
-question: |
-  Review your form before you sign it
-subquestion: |
-  Here is a preview of the form you will sign on the next page. 
+# ---
+# id: Review your form before you sign it
+# continue button field: macorisealingform_preview_question
+# question: |
+#   Review your form before you sign it
+# subquestion: |
+#   Here is a preview of the form you will sign on the next page. 
   
-   ${ al_user_bundle.as_pdf(key='preview') }
+#    ${ al_user_bundle.as_pdf(key='preview') }
   
-  Click the image to open it in a new tab. Click the 'Make changes' button to fix any mistakes.
+#   Click the image to open it in a new tab. Click the 'Make changes' button to fix any mistakes.
   
-  ${ action_button_html(url_action('review_macorisealingform'), label='Make changes', color='info') } 
+#   ${ action_button_html(url_action('review_macorisealingform'), label='Make changes', color='info') } 
   
-  Remember to come back to this window to continue and sign your form.
----
-id: Screen one
-question: |
-  Screen one
-yesno: is_a1_juvenile
----
-id: Screen two
-continue button field: Screen_two
-question: |
-  Screen two
-fields:
-  - 'Is a2 misdemeanor': is_a2_misdemeanor
-    datatype: yesno
-  - 'Is a3 felony': is_a3_felony
-    datatype: yesno
-  - 'Is a4 decriminalized': is_a4_decriminalized
-    datatype: yesno
----
-id: Screen three
-continue button field: Screen_three
-question: |
-  Screen three
-fields:
-  - 'Alias or previous name': user_name_previous
-    maxlength: 78
-  - 'Occupation': user_occupation
-    maxlength: 30
-  - 'Social Security Number': user_social_security
-    maxlength: 19
-  - 'Place of Birth': user_birthplace
-    maxlength: 21
-  - "Mother's Maiden Name": parent2_name_maiden
-    maxlength: 16
----
-id: Screen four
-continue button field: Screen_four
-question: |
-  Screen four
-fields:
-  - 'Is a1 affidavit': is_a1_affidavit
-    datatype: yesno
-  - 'Is a2 affidavit': is_a2_affidavit
-    datatype: yesno
-  - 'Is a3 affidavit': is_a3_affidavit
-    datatype: yesno
----
-id: Screen five
-question: |
-  Screen five
-yesno: 
----
-progress: 100
-id: download
-event: macorisealingform_download
-question: |
-  Your form is ready to download.
-subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
+#   Remember to come back to this window to continue and sign your form.
+# ---
+# id: Screen one
+# question: |
+#   Screen one
+# yesno: is_a1_juvenile
+# ---
+# id: Screen two
+# continue button field: Screen_two
+# question: |
+#   Screen two
+# fields:
+#   - 'Is a2 misdemeanor': is_a2_misdemeanor
+#     datatype: yesno
+#   - 'Is a3 felony': is_a3_felony
+#     datatype: yesno
+#   - 'Is a4 decriminalized': is_a4_decriminalized
+#     datatype: yesno
+# ---
+# id: Screen three
+# continue button field: Screen_three
+# question: |
+#   Screen three
+# fields:
+#   - 'Alias or previous name': user_name_previous
+#     maxlength: 78
+#   - 'Occupation': user_occupation
+#     maxlength: 30
+#   - 'Social Security Number': user_social_security
+#     maxlength: 19
+#   - 'Place of Birth': user_birthplace
+#     maxlength: 21
+#   - "Mother's Maiden Name": parent2_name_maiden
+#     maxlength: 16
+# ---
+# id: Screen four
+# continue button field: Screen_four
+# question: |
+#   Screen four
+# fields:
+#   - 'Is a1 affidavit': is_a1_affidavit
+#     datatype: yesno
+#   - 'Is a2 affidavit': is_a2_affidavit
+#     datatype: yesno
+#   - 'Is a3 affidavit': is_a3_affidavit
+#     datatype: yesno
+# ---
+# id: Screen five
+# question: |
+#   Screen five
+# yesno: 
+# ---
+# progress: 100
+# id: download
+# event: macorisealingform_download
+# question: |
+#   Your form is ready to download.
+# subquestion: |
+#   Thank you ${users}. Your form is ready to download and deliver.
   
-  View, download and send your form below. Click the "Make changes" button to fix any mistakes. 
+#   View, download and send your form below. Click the "Make changes" button to fix any mistakes. 
   
-  ${ action_button_html(url_action('review_macorisealingform'), label='Make changes', color='info') } 
+#   ${ action_button_html(url_action('review_macorisealingform'), label='Make changes', color='info') } 
   
-  ${ al_user_bundle.download_list_html() }
+#   ${ al_user_bundle.download_list_html() }
   
-  ${ al_user_bundle.send_button_html() }
----
-objects:
-  - macorisealingform_attachment: ALDocument.using(title="Petition to seal MA criminal records", filename="ma-cori-sealing-form", enabled=True, has_addendum=False)
----
-objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[macorisealingform_attachment], filename="ma-cori-sealing-form.pdf", title="All forms to download for your records")
-  - al_court_bundle: ALDocumentBundle.using(elements=[macorisealingform_attachment], filename="ma-cori-sealing-form.pdf", title="All forms to download for your records")
----
-attachment:
-    variable name: macorisealingform_attachment[i]
-    name: MA CORI Sealing
-    filename: MA-CORI-Sealing
-    skip undefined: True
-    pdf template file: sealing-form.pdf
-    fields: 
-      - "user_name_last": ${ users[0].name.last }
-      - "user_name_first": ${ users[0].name.first }
-      - "user_name_middle": ${ users[0].name.middle }
-      - "user_birthdate": ${ users[0].birthdate.format() }
-      - "user_mail_address_line_one": ${ users[0].mail_address.line_one() }
-      - "user_mail_address_city": ${ users[0].mail_address.city }
-      - "user_mail_address_state": ${ users[0].mail_address.state }
-      - "user_mail_address_zip": ${ users[0].mail_address.zip }
-      - "parent_name": ${ parents[0] }
-      - "spouse_name": ${ spouses[0] }
-      # It's a signature: test which file version this is; leave empty unless it's the final version)
-      - "user_signature": ${ users[0].signature if i == 'final' else '' }
-      - "is_a1_juvenile": ${ is_a1_juvenile }
-      - "is_a2_misdemeanor": ${ is_a2_misdemeanor }
-      - "is_a3_felony": ${ is_a3_felony }
-      - "is_a4_decriminalized": ${ is_a4_decriminalized }
-      - "user_name_previous": ${ user_name_previous }
-      - "user_occupation": ${ user_occupation }
-      - "user_social_security": ${ user_social_security }
-      - "user_birthplace": ${ user_birthplace }
-      - "parent2_name_maiden": ${ parent2_name_maiden }
-      - "is_a1_affidavit": ${ is_a1_affidavit }
-      - "is_a2_affidavit": ${ is_a2_affidavit }
-      - "is_a3_affidavit": ${ is_a3_affidavit }
-      - "": ${  }
-      # It's a signature: test which file version this is; leave empty unless it's the final version)
-      - "user_signature2": ${ user_signature2 if i == 'final' else '' }
-      # It's a signature: test which file version this is; leave empty unless it's the final version)
-      - "user_signature3": ${ user_signature3 if i == 'final' else '' }
----
-id: macorisealingform review screen
-event: review_macorisealingform
-question: |
-  Review Screen
-subquestion: |
-  Edit your answers below
-review: 
-  - Edit: is_a1_juvenile
-    button: |
-      **Is a1 juvenile**:
-      ${ word(yesno(is_a1_juvenile)) }
-  - Edit: is_a2_misdemeanor
-    button: |
-      **Is a2 misdemeanor**:
-      ${ word(yesno(is_a2_misdemeanor)) }
-  - Edit: is_a3_felony
-    button: |
-      **Is a3 felony**:
-      ${ word(yesno(is_a3_felony)) }
-  - Edit: is_a4_decriminalized
-    button: |
-      **Is a4 decriminalized**:
-      ${ word(yesno(is_a4_decriminalized)) }
-  - Edit: user_name_previous
-    button: |
-      **Alias or previous name**:
-      ${ user_name_previous }
-  - Edit: user_occupation
-    button: |
-      **Occupation**:
-      ${ user_occupation }
-  - Edit: user_social_security
-    button: |
-      **Social Security Number**:
-      ${ user_social_security }
-  - Edit: user_birthplace
-    button: |
-      **Place of Birth**:
-      ${ user_birthplace }
-  - Edit: parent2_name_maiden
-    button: |
-      **Mother's Maiden Name**:
-      ${ parent2_name_maiden }
-  - Edit: is_a1_affidavit
-    button: |
-      **Is a1 affidavit**:
-      ${ word(yesno(is_a1_affidavit)) }
-  - Edit: is_a2_affidavit
-    button: |
-      **Is a2 affidavit**:
-      ${ word(yesno(is_a2_affidavit)) }
-  - Edit: is_a3_affidavit
-    button: |
-      **Is a3 affidavit**:
-      ${ word(yesno(is_a3_affidavit)) }
-  - Edit: 
-    button: |
-      **uhh**:
-      ${ word(yesno()) }
-  - Edit: users[0].name.last
-    button: |
-      **users**
+#   ${ al_user_bundle.send_button_html() }
+# ---
+# objects:
+#   - macorisealingform_attachment: ALDocument.using(title="Petition to seal MA criminal records", filename="ma-cori-sealing-form", enabled=True, has_addendum=False)
+# ---
+# objects:
+#   - al_user_bundle: ALDocumentBundle.using(elements=[macorisealingform_attachment], filename="ma-cori-sealing-form.pdf", title="All forms to download for your records")
+#   - al_court_bundle: ALDocumentBundle.using(elements=[macorisealingform_attachment], filename="ma-cori-sealing-form.pdf", title="All forms to download for your records")
+# ---
+# attachment:
+#     variable name: macorisealingform_attachment[i]
+#     name: MA CORI Sealing
+#     filename: MA-CORI-Sealing
+#     skip undefined: True
+#     pdf template file: sealing-form.pdf
+#     fields: 
+#       - "user_name_last": ${ users[0].name.last }
+#       - "user_name_first": ${ users[0].name.first }
+#       - "user_name_middle": ${ users[0].name.middle }
+#       - "user_birthdate": ${ users[0].birthdate.format() }
+#       - "user_mail_address_line_one": ${ users[0].mail_address.line_one() }
+#       - "user_mail_address_city": ${ users[0].mail_address.city }
+#       - "user_mail_address_state": ${ users[0].mail_address.state }
+#       - "user_mail_address_zip": ${ users[0].mail_address.zip }
+#       - "parent_name": ${ parents[0] }
+#       - "spouse_name": ${ spouses[0] }
+#       # It's a signature: test which file version this is; leave empty unless it's the final version)
+#       - "user_signature": ${ users[0].signature if i == 'final' else '' }
+#       - "is_a1_juvenile": ${ is_a1_juvenile }
+#       - "is_a2_misdemeanor": ${ is_a2_misdemeanor }
+#       - "is_a3_felony": ${ is_a3_felony }
+#       - "is_a4_decriminalized": ${ is_a4_decriminalized }
+#       - "user_name_previous": ${ user_name_previous }
+#       - "user_occupation": ${ user_occupation }
+#       - "user_social_security": ${ user_social_security }
+#       - "user_birthplace": ${ user_birthplace }
+#       - "parent2_name_maiden": ${ parent2_name_maiden }
+#       - "is_a1_affidavit": ${ is_a1_affidavit }
+#       - "is_a2_affidavit": ${ is_a2_affidavit }
+#       - "is_a3_affidavit": ${ is_a3_affidavit }
+#       - "": ${  }
+#       # It's a signature: test which file version this is; leave empty unless it's the final version)
+#       - "user_signature2": ${ user_signature2 if i == 'final' else '' }
+#       # It's a signature: test which file version this is; leave empty unless it's the final version)
+#       - "user_signature3": ${ user_signature3 if i == 'final' else '' }
+# ---
+# id: macorisealingform review screen
+# event: review_macorisealingform
+# question: |
+#   Review Screen
+# subquestion: |
+#   Edit your answers below
+# review: 
+#   - Edit: is_a1_juvenile
+#     button: |
+#       **Is a1 juvenile**:
+#       ${ word(yesno(is_a1_juvenile)) }
+#   - Edit: is_a2_misdemeanor
+#     button: |
+#       **Is a2 misdemeanor**:
+#       ${ word(yesno(is_a2_misdemeanor)) }
+#   - Edit: is_a3_felony
+#     button: |
+#       **Is a3 felony**:
+#       ${ word(yesno(is_a3_felony)) }
+#   - Edit: is_a4_decriminalized
+#     button: |
+#       **Is a4 decriminalized**:
+#       ${ word(yesno(is_a4_decriminalized)) }
+#   - Edit: user_name_previous
+#     button: |
+#       **Alias or previous name**:
+#       ${ user_name_previous }
+#   - Edit: user_occupation
+#     button: |
+#       **Occupation**:
+#       ${ user_occupation }
+#   - Edit: user_social_security
+#     button: |
+#       **Social Security Number**:
+#       ${ user_social_security }
+#   - Edit: user_birthplace
+#     button: |
+#       **Place of Birth**:
+#       ${ user_birthplace }
+#   - Edit: parent2_name_maiden
+#     button: |
+#       **Mother's Maiden Name**:
+#       ${ parent2_name_maiden }
+#   - Edit: is_a1_affidavit
+#     button: |
+#       **Is a1 affidavit**:
+#       ${ word(yesno(is_a1_affidavit)) }
+#   - Edit: is_a2_affidavit
+#     button: |
+#       **Is a2 affidavit**:
+#       ${ word(yesno(is_a2_affidavit)) }
+#   - Edit: is_a3_affidavit
+#     button: |
+#       **Is a3 affidavit**:
+#       ${ word(yesno(is_a3_affidavit)) }
+#   - Edit: 
+#     button: |
+#       **uhh**:
+#       ${ word(yesno()) }
+#   - Edit: users[0].name.last
+#     button: |
+#       **users**
 
-      % for my_var in users:
-        * ${ my_var }
-      % endfor
-    # NOTE: a question block with 'users.revisit'
-    # lets the user edit all of the items at once
-  - Edit: users[0].birthdate
-    button: |
-      **users[0].birthdate**:
-      ${ users[0].birthdate.format() }
-  - Edit: users[0].mail_address.address
-    button: |
-      **users[0].mail_address.address**:
-      ${ users[0].mail_address.line_one() }
-  - Edit: parents[0].name.first
-    button: |
-      **parents**
+#       % for my_var in users:
+#         * ${ my_var }
+#       % endfor
+#     # NOTE: a question block with 'users.revisit'
+#     # lets the user edit all of the items at once
+#   - Edit: users[0].birthdate
+#     button: |
+#       **users[0].birthdate**:
+#       ${ users[0].birthdate.format() }
+#   - Edit: users[0].mail_address.address
+#     button: |
+#       **users[0].mail_address.address**:
+#       ${ users[0].mail_address.line_one() }
+#   - Edit: parents[0].name.first
+#     button: |
+#       **parents**
 
-      % for my_var in parents:
-        * ${ my_var }
-      % endfor
-    # NOTE: a question block with 'parents.revisit'
-    # lets the user edit all of the items at once
-  - Edit: spouses[0].name.first
-    button: |
-      **spouses**
+#       % for my_var in parents:
+#         * ${ my_var }
+#       % endfor
+#     # NOTE: a question block with 'parents.revisit'
+#     # lets the user edit all of the items at once
+#   - Edit: spouses[0].name.first
+#     button: |
+#       **spouses**
 
-      % for my_var in spouses:
-        * ${ my_var }
-      % endfor
-    # NOTE: a question block with 'spouses.revisit'
-    # lets the user edit all of the items at once
-  - Edit: users[0].signature
-    button: |
-      **users[0].signature**:
-      ${ users[0].signature }
-  - Edit: user_signature2
-    button: |
-      **user_signature2**:
-      ${ user_signature2 }
-  - Edit: user_signature3
-    button: |
-      **user_signature3**:
-      ${ user_signature3 }
+#       % for my_var in spouses:
+#         * ${ my_var }
+#       % endfor
+#     # NOTE: a question block with 'spouses.revisit'
+#     # lets the user edit all of the items at once
+#   - Edit: users[0].signature
+#     button: |
+#       **users[0].signature**:
+#       ${ users[0].signature }
+#   - Edit: user_signature2
+#     button: |
+#       **user_signature2**:
+#       ${ user_signature2 }
+#   - Edit: user_signature3
+#     button: |
+#       **user_signature3**:
+#       ${ user_signature3 }
