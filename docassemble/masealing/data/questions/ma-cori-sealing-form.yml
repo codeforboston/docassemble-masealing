@@ -1,12 +1,7 @@
 ---
-
-question: hello
-
----
 include:
   - docassemble.AssemblyLine:al_package.yml
   - docassemble.MassAccess:massaccess.yml
-
 ---
 comment: |
   The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
@@ -93,7 +88,7 @@ code: |
   set_progress(28.57)
   users[0].birthdate
   set_progress(42.86)
-  users[0].mail_address.address
+  #users[0].mail_address.address
   set_progress(57.14)
   parents.gather()
   spouses.gather()
