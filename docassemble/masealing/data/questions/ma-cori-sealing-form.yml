@@ -1,6 +1,12 @@
+---
+
+question: hello
+
+---
 include:
   - docassemble.AssemblyLine:al_package.yml
   - docassemble.MassAccess:massaccess.yml
+
 ---
 comment: |
   The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
@@ -48,7 +54,6 @@ objects:
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - parents: ALPeopleList
   - spouses: ALPeopleList
-
 ---
 ###################### Main order ######################
 mandatory: True
@@ -83,7 +88,6 @@ code: |
   Screen_three
   set_progress(14.29)
   Screen_four
-  
   users.gather()
   set_parts(subtitle=str(users))
   set_progress(28.57)
@@ -110,13 +114,13 @@ question: |
   Review your form before you sign it
 subquestion: |
   Here is a preview of the form you will sign on the next page. 
-  
+
    ${ al_user_bundle.as_pdf(key='preview') }
-  
+
   Click the image to open it in a new tab. Click the 'Make changes' button to fix any mistakes.
-  
+
   ${ action_button_html(url_action('review_macorisealingform'), label='Make changes', color='info') } 
-  
+
   Remember to come back to this window to continue and sign your form.
 ---
 id: Screen one
@@ -167,7 +171,7 @@ fields:
 id: Screen five
 question: |
   Screen five
-yesno: 
+yesno: Screen_five
 ---
 progress: 100
 id: download
@@ -176,13 +180,9 @@ question: |
   Your form is ready to download.
 subquestion: |
   Thank you ${users}. Your form is ready to download and deliver.
-  
   View, download and send your form below. Click the "Make changes" button to fix any mistakes. 
-  
   ${ action_button_html(url_action('review_macorisealingform'), label='Make changes', color='info') } 
-  
   ${ al_user_bundle.download_list_html() }
-  
   ${ al_user_bundle.send_button_html() }
 ---
 objects:
@@ -268,6 +268,7 @@ review:
     button: |
       **Place of Birth**:
       ${ user_birthplace }
+
   - Edit: parent2_name_maiden
     button: |
       **Mother's Maiden Name**:
@@ -284,14 +285,13 @@ review:
     button: |
       **Is a3 affidavit**:
       ${ word(yesno(is_a3_affidavit)) }
-  - Edit: 
+  - Edit: Screen_five
     button: |
       **uhh**:
       ${ word(yesno()) }
   - Edit: users[0].name.last
     button: |
       **users**
-
       % for my_var in users:
         * ${ my_var }
       % endfor
@@ -308,7 +308,6 @@ review:
   - Edit: parents[0].name.first
     button: |
       **parents**
-
       % for my_var in parents:
         * ${ my_var }
       % endfor
@@ -317,7 +316,6 @@ review:
   - Edit: spouses[0].name.first
     button: |
       **spouses**
-
       % for my_var in spouses:
         * ${ my_var }
       % endfor
