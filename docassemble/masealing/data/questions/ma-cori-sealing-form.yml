@@ -69,6 +69,10 @@ code: |
   users[0].signature
   macorisealingform_download
 ---
+comment: |
+  logic:
+  can_seal = juvenile or 
+---
 #################### Interview order #####################
 comment: |
   Controls order and branching logic of questions in the interview
@@ -78,17 +82,18 @@ code: |
   allowed_courts = interview_metadata["macorisealingform"]["allowed courts"]
   nav.set_section('review_macorisealingform')
   user_role = 'plaintiff'
-  is_a1_juvenile
-  Screen_two
-  Screen_three
+  (is_a1_juvenile and is_a1_affidavit)
+  (is_a2_misdemeanor and is_a2_affidavit)
+  (is_a3_felony and is_a3_affidavit)
+  is_a4_decriminalized
+  petitioner_personal_info
   set_progress(14.29)
-  Screen_four
   users.gather()
   set_parts(subtitle=str(users))
   set_progress(28.57)
   users[0].birthdate
   set_progress(42.86)
-  #users[0].mail_address.address
+  #users[0].mailing_address
   set_progress(57.14)
   parents.gather()
   spouses.gather()
@@ -118,55 +123,92 @@ subquestion: |
 
   Remember to come back to this window to continue and sign your form.
 ---
-id: Screen one
+id: Seal Juvenile Records
 question: |
-  Screen one
+  Are you sealing Juvenile Records?
 yesno: is_a1_juvenile
 ---
-id: Screen two
-continue button field: Screen_two
+id: Seal Misedmeanor Records
 question: |
-  Screen two
-fields:
-  - 'Is a2 misdemeanor': is_a2_misdemeanor
-    datatype: yesno
-  - 'Is a3 felony': is_a3_felony
-    datatype: yesno
-  - 'Is a4 decriminalized': is_a4_decriminalized
-    datatype: yesno
+  Are you sealing Misedmeanor Records?
+yesno: is_a2_misdemeanor
 ---
-id: Screen three
-continue button field: Screen_three
+id: Seal Felony Records
+question: |
+  Are you sealing Felony Records?
+yesno: is_a3_felony
+---
+id: Seal Decriminalized Records
+question: |
+  Are you sealing Decriminalized Records?
+yesno: is_a4_decriminalized
+---
+id: Seal Juvenile Records Affadavit
+question: |
+  To the best of my knowledge, I qualify to seal my juvenile records
+yesno: is_a1_affidavit
+---
+id: Seal Misedmeanor Records Affadavit
+question: |
+  To the best of my knowledge, I qualify to seal my misdemeanor records
+yesno: is_a2_affidavit
+---
+id: Seal Felony Records Affadavit
+question: |
+  To the best of my knowledge, I qualify to seal my felony records
+yesno: is_a3_affidavit
+---
+comment: |
+  continue button field: Screen_two
+  question: |
+    Screen two
+  fields:
+    - 'Is a2 misdemeanor': is_a2_misdemeanor
+      datatype: yesno
+    - 'Is a3 felony': is_a3_felony
+      datatype: yesno
+    - 'Is a4 decriminalized': is_a4_decriminalized
+      datatype: yesno
+---
+id: Personal information
+continue button field: petitioner_personal_info
 question: |
   Screen three
 fields:
   - 'Alias or previous name': user_name_previous
     maxlength: 78
+    required: false
   - 'Occupation': user_occupation
     maxlength: 30
+    required: false
   - 'Social Security Number': user_social_security
     maxlength: 19
+    required: false
   - 'Place of Birth': user_birthplace
     maxlength: 21
+    required: false
   - "Mother's Maiden Name": parent2_name_maiden
     maxlength: 16
+    required: false
 ---
-id: Screen four
-continue button field: Screen_four
-question: |
-  Screen four
-fields:
-  - 'Is a1 affidavit': is_a1_affidavit
-    datatype: yesno
-  - 'Is a2 affidavit': is_a2_affidavit
-    datatype: yesno
-  - 'Is a3 affidavit': is_a3_affidavit
-    datatype: yesno
+comment: |
+  id: Screen four
+  continue button field: Screen_four
+  question: |
+    Screen four
+  fields:
+    - 'Is a1 affidavit': is_a1_affidavit
+      datatype: yesno
+    - 'Is a2 affidavit': is_a2_affidavit
+      datatype: yesno
+    - 'Is a3 affidavit': is_a3_affidavit
+      datatype: yesno
 ---
-id: Screen five
-question: |
-  Screen five
-yesno: Screen_five
+comment: |
+  id: Screen five
+  question: |
+    Screen five
+  yesno: Screen_five
 ---
 progress: 100
 id: download
@@ -198,10 +240,10 @@ attachment:
       - "user_name_first": ${ users[0].name.first }
       - "user_name_middle": ${ users[0].name.middle }
       - "user_birthdate": ${ users[0].birthdate.format() }
-      - "user_mail_address_line_one": ${ users[0].mail_address.line_one() }
-      - "user_mail_address_city": ${ users[0].mail_address.city }
-      - "user_mail_address_state": ${ users[0].mail_address.state }
-      - "user_mail_address_zip": ${ users[0].mail_address.zip }
+      - "user_mail_address_line_one": ${ users[0].address.line_one() }
+      - "user_mail_address_city": ${ users[0].address.city }
+      - "user_mail_address_state": ${ users[0].address.state }
+      - "user_mail_address_zip": ${ users[0].address.zip }
       - "parent_name": ${ parents[0] }
       - "spouse_name": ${ spouses[0] }
       # It's a signature: test which file version this is; leave empty unless it's the final version)
